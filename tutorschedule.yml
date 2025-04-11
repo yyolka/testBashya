@@ -1,0 +1,71 @@
+swagger: '2.0'
+info:
+  title: TutorSchedule API
+  version: '1.0'
+host: api.server.test
+basePath: /v1
+schemes:
+  - https
+paths:
+  /Slots/{tutorId}:
+    get:
+      summary: Получить расписание репетитора
+      description: Возвращает список доступных и занятых слотов репетитора
+      parameters:
+        - name: tutorId
+          in: path
+          required: true
+          type: integer
+          description: ID репетитора
+        - name: dateFrom
+          in: query
+          type: string
+          format: dateTime
+          description: Начальная дата периода (YYYY-MM-DD)
+        - name: dateTo
+          in: query
+          type: string
+          format: dateTime
+          description: Конечная дата периода (YYYY-MM-DD)
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Репетитор не найден
+  /TutorsSchedule/{slotId}/book:        
+    post:
+      summary: Забронировать слот
+      description: Бронирование выбранного слота для ученика
+      parameters:
+        - name: slotId
+          in: path
+          required: true
+          type: integer
+          description: ID слота
+      responses:
+        '200':
+          description: Успешное бронирование
+        '400':
+          description: Неверный запрос (слот занят или не существует)
+        '404':
+          description: Слот не найден
+
+definitions:
+  Slot:
+      type: object
+      properties:
+        slotId:
+          type: integer
+        tutorId:
+          type: integer
+        StudentId:
+          type: integer
+        isAvailable:
+          type: boolean
+        dateTime:
+          type: string
+          format: dateTime
+        subject:
+          type: string
+        location:
+          type: string
